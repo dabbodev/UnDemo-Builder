@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Un:Demo-Builder</title>
+
+    <!-- update the version number as needed -->
+    <script defer src="/__/firebase/8.4.2/firebase-app.js"></script>
+    <!-- include only the Firebase features as you need -->
+    <script defer src="/__/firebase/8.4.2/firebase-auth.js"></script>
+    <script defer src="/__/firebase/8.4.2/firebase-database.js"></script>
+    <script defer src="/__/firebase/8.4.2/firebase-firestore.js"></script>
+    <script defer src="/__/firebase/8.4.2/firebase-functions.js"></script>
+    <script defer src="/__/firebase/8.4.2/firebase-messaging.js"></script>
+    <script defer src="/__/firebase/8.4.2/firebase-storage.js"></script>
+    <script defer src="/__/firebase/8.4.2/firebase-analytics.js"></script>
+    <script defer src="/__/firebase/8.4.2/firebase-remote-config.js"></script>
+    <script defer src="/__/firebase/8.4.2/firebase-performance.js"></script>
+    <!-- 
+      initialize the SDK after all desired features are loaded, set useEmulator to false
+      to avoid connecting the SDK to running emulators.
+    -->
+    <script defer src="/__/firebase/init.js?useEmulator=true"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    
+  </head>
+  <body>
+    <div id="app">
+      <table>
+        <tr>
+          <td VALIGN=TOP>
+            <div id="model">
+              <div class="model">
+                <table>
+                  <tr>
+                    <td>#</td>
+                    <td>X</td>
+                    <td>Y</td>
+                    <td>Z</td>
+                  </tr>
+                  <tr v-for="(item, index) of key.poly">
+                    <td>{{ index + 1 }}</td>
+                    <td><input type="number" v-model="key.poly[index][0]"></td>
+                    <td><input type="number" v-model="key.poly[index][1]"></td>
+                    <td><input type="number" v-model="key.poly[index][2]"></td>
+                  </tr>
+                  <tr>
+                    <td><button onclick="v.addPoint()">+</button></td>
+                    <td><input type="number" id="X" v-model="inX" value=0></td>
+                    <td><input type="number" id="Y" v-model="inY" value=0></td>
+                    <td><input type="number" id="Z" v-model="inZ" value=0></td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </td>
+          <td VALIGN=TOP>
+            <div class="data-in">
+              <table>
+                <tr>
+                  <td><button onclick="promptFilename()">Import</button></td>
+                  <td><button onclick="v.copyTarget()">Copy</button></td>
+                </tr>
+                <tr>
+                  <td colspan=2>
+                    Original Data
+                  </td>
+                </tr>
+                <tr v-for="(item, index) of dataCoupled">
+                  <td>{{ index }}</td>
+                  <td>{{ item }}</td>
+                </tr>
+              </table>
+            </div>
+          </td>
+          <td VALIGN=TOP>
+            <div class="mask">
+              <table>
+                <tr>
+                  <td><button onclick="v.generateMask()">Generate Mask</button></td>
+                </tr>
+                <tr>
+                  <td>Mask</td>
+                </tr>
+                <tr v-for="(item, index) of mask">
+                  <td>{{ item }}</td>
+                </tr>
+              </table>
+            </div>
+          </td>
+          <td VALIGN=TOP>
+            <div class="target">
+              <table>
+                <tr>
+                  <td colspan=2>Output</td>
+                </tr>
+                <tr>
+                  <td><button onclick="v.shiftUp()">Up</button></td>
+                  <td><button onclick="v.shiftDown()">Down</button></td>
+                </tr>
+                <tr v-for="(item, index) of targetCoupled">
+                  <td>{{ index }}</td>
+                  <td>{{ item }}</td>
+                </tr>
+              </table>
+            </div>
+          </td>
+        </tr>
+      </table>
+    
+  </div>
+  <script src="./unobtainium.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+        // // The Firebase SDK is initialized and available here!
+        //
+        // firebase.auth().onAuthStateChanged(user => { });
+        // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
+        // firebase.firestore().doc('/foo/bar').get().then(() => { });
+        // firebase.functions().httpsCallable('yourFunction')().then(() => { });
+        // firebase.messaging().requestPermission().then(() => { });
+        // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
+        // firebase.analytics(); // call to activate
+        // firebase.analytics().logEvent('tutorial_completed');
+        // firebase.performance(); // call to activate
+        //
+        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+
+        try {
+          let app = firebase.app();
+          let features = [
+            'auth', 
+            'database', 
+            'firestore',
+            'functions',
+            'messaging', 
+            'storage', 
+            'analytics', 
+            'remoteConfig',
+            'performance',
+          ].filter(feature => typeof app[feature] === 'function');
+          
+        } catch (e) {
+          console.error(e);
+        }
+      });
+
+
+
+      var input = document.createElement('input');
+          function promptFile(contentType, multiple) {
+          var input = document.createElement("input");
+          input.type = "file";
+          input.multiple = multiple;
+          input.accept = contentType;
+          return new Promise(function(resolve) {
+            document.activeElement.onfocus = function() {
+              document.activeElement.onfocus = null;
+              setTimeout(resolve, 500);
+            };
+            input.onchange = function() {
+              var files = Array.from(input.files);
+              if (multiple)
+                return resolve(files);
+              resolve(files[0]);
+            };
+            input.click();
+          });
+        }
+        function promptFilename() {
+          promptFile().then(function(file) {
+            v.origin = ""
+            v.dataCoupled = []
+            v.target = ""
+            v.targetCoupled = []
+            console.log(1, file)
+            //document.querySelector(".data-in").innerText = file && file.name || "no file selected";
+            var reader = new FileReader();
+            reader.onload = function () {
+              console.log(2, reader.result)
+              v.rawData += reader.result
+              var hex = '';
+              for(var i=0;i<reader.result.toString().length;i++) {
+                  hex += ''+reader.result.toString().charCodeAt(i).toString(16).toUpperCase();
+              }
+              v.origin += hex
+            }
+            reader.onloadend = function () {
+              if (v.origin.length > 4000) {
+                v.origin = v.origin.substr(0, 3999)
+              }
+              v.coupleData()
+            }
+
+            reader.readAsBinaryString(file);
+            
+          });
+        }
+
+        var v = new Vue({
+          el: '#app',
+          data: {
+            key: {poly: []},
+            origin: "",
+            target: "",
+            dataCoupled: [],
+            targetCoupled: [],
+            inX: 0,
+            inY: 0,
+            inZ: 0,
+            mask: [],
+            rawData: undefined
+          },
+          computed: {
+          },
+          methods: {
+            coupleData: function() {
+              var d = []
+              var t = ""
+              for (var a = 0; a < this.origin.length; a++) {
+                t += this.origin[a]
+                if (t.length == 4) {
+                  d.push("" + t)
+                  t = ""
+                }
+              }
+              this.dataCoupled = d
+            },
+            coupleTarget: function() {
+              var d = []
+              var t = ""
+              for (var a = 0; a < this.target.length; a++) {
+                t += this.target[a]
+                if (t.length == 4) {
+                  d.push("" + t)
+                  t = ""
+                }
+              }
+              this.targetCoupled = d
+            },
+            addPoint: function() {
+              this.key.poly.push([this.inX, this.inY, this.inZ])
+            },
+            generateMask: function() {
+              this.mask = []
+              if (this.key.poly.length >= 3) {
+                var point = 0
+                var shift = 0
+                var gap = 0
+                var t = ""
+                for (var i = 0; i < this.origin.length; i++) {
+                  var point2 = ((point + shift + 1) % this.key.poly.length)
+                  var point3 = ((point + shift + gap + 2) % this.key.poly.length)
+
+                  //console.log(point, point2, point3, this.key.poly.length)
+                  var angle = this.triangulate(point, point2, point3)
+                  var d1 = this.key.poly[point][0]
+                  var d2 = this.key.poly[point][1]
+                  var d3 = this.key.poly[point][2]
+                  var h = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"]
+                  
+                  if (angle < 15) {
+                      var e = Math.floor((d1 + d2 + d3)) % 15
+                      //console.log(e)
+                      t += "+" + h[Math.abs(e)]
+                  } else if (angle < 30) {
+                      var e = Math.floor((d1 + d2 - d3)) % 15
+                      //console.log(e)
+                      t += "+" + h[Math.abs(e)]
+                  } else if (angle < 45) {
+                      var e = Math.floor((d1 - d2 - d3)) % 15
+                      //console.log(e)
+                      t += "+" + h[Math.abs(e)]
+                  } else if (angle < 60) {
+                      var e = Math.floor((d1 - d2 + d3)) % 15
+                      //console.log(e)
+                      t += "+" + h[Math.abs(e)]
+                  } else if (angle < 75) {
+                      var e = Math.ceil((d1 + d2 + d3)) % 15
+                      //console.log(e)
+                      t += "-" + h[Math.abs(e)]
+                  } else if (angle < 90) {
+                      var e = Math.ceil((d1 + d2 - d3)) % 15
+                      //console.log(e)
+                      t += "-" + h[Math.abs(e)]
+                  } else if (angle < 105) {
+                      var e = Math.ceil((d1 - d2 - d3)) % 15
+                      //console.log(e)
+                      t += "-" + h[Math.abs(e)]
+                  } else {
+                      var e = Math.ceil((d1 - d2 + d3)) % 15
+                      //console.log(e)
+                      t += "-" + h[Math.abs(e)]
+                  }
+                  if (t.length >= 8) {
+                    this.mask.push(t)
+                    t = ""
+                  }
+                  if (point == (this.key.poly.length - 1)) {
+                      if (shift == (this.key.poly.length - 1)) {
+                          gap = ((gap + 1) % this.key.poly.length)
+                      }
+                      shift = ((shift + 1) % this.key.poly.length)
+                  }
+                  point = ((point + 1) % this.key.poly.length)
+                }
+                this.mask.push(t)
+              }
+            },
+            triangulate: function(index, i2, i3) {
+              var a = 0
+              for (var i = 0; i < this.key.poly[index].length; i++) {
+                  a += Math.pow((this.key.poly[i2][i] - this.key.poly[index][i]), 2)
+              }
+              a = Math.sqrt(a)
+
+              var b = 0
+              for (var i = 0; i < this.key.poly[index].length; i++) {
+                  b += Math.pow((this.key.poly[index][i] - this.key.poly[i3][i]), 2)
+              }
+              b = Math.sqrt(b)
+
+              var c = 0
+              for (var i = 0; i < this.key.poly[index].length; i++) {
+                  c += Math.pow((this.key.poly[i3][i] - this.key.poly[i2][i]), 2)
+              }
+              c = Math.sqrt(c)
+
+              var cosC = (Math.pow(a, 2) + Math.pow(b, 2) - Math.pow(c, 2)) / (2 * a * b)
+              var pi = Math.PI
+              var deg = Math.acos(cosC) * (180/pi)
+
+              return deg
+            },
+            shiftUp: function() {
+              var h = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"]
+              if (this.mask.length > 1) {
+                console.log("test")
+                this.target = ""
+                this.targetCoupled = []
+                for (var a = 0; a < this.dataCoupled.length; a++) {
+                  var t = ""
+                  for (var b = 0; b < this.dataCoupled[a].length; b++) {                 
+                    if (this.mask[a].split('')[b*2] == "+") {
+                      console.log(h.indexOf(this.dataCoupled[a][b]), "+", h.indexOf(this.mask[a].split('')[1+b*2]))
+                      var k = h.indexOf(this.dataCoupled[a][b]) + h.indexOf(this.mask[a].split('')[1+b*2])
+                      k = k%16
+                      if (k < 0) {
+                        k += 16
+                      }
+                      console.log(k)
+                      t += h[k]
+                    } else {
+                      console.log(h.indexOf(this.dataCoupled[a][b]), "-", h.indexOf(this.mask[a].split('')[1+b*2]))
+                      var k = h.indexOf(this.dataCoupled[a][b]) - h.indexOf(this.mask[a].split('')[1+b*2])
+                      k = k%16
+                      if (k < 0) {
+                        k += 16
+                      }
+                      console.log(k)
+                      t += h[k]
+                    }
+                    if (t.length >= 4) {
+                      this.target += t
+                      this.targetCoupled.push(t)
+                      t = ""
+                    }
+                  }
+                }
+              }
+            },
+            shiftDown: function() {
+              var h = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"]
+              if (this.mask.length > 1) {
+                console.log("test")
+                this.target = ""
+                this.targetCoupled = []
+                for (var a = 0; a < this.dataCoupled.length; a++) {
+                  var t = ""
+                  for (var b = 0; b < this.dataCoupled[a].length; b++) {                 
+                    if (this.mask[a].split('')[b*2] == "+") {
+                      var k = h.indexOf(this.dataCoupled[a][b]) - h.indexOf(this.mask[a].split('')[1+b*2])
+                      k = k%16
+                      if (k < 0) {
+                        k += 16
+                      }
+                      console.log(k)
+                      t += h[k]
+                    } else {
+                      var k = h.indexOf(this.dataCoupled[a][b]) + h.indexOf(this.mask[a].split('')[1+b*2])
+                      k = k%16
+                      if (k < 0) {
+                        k += 16
+                      }
+                      console.log(k)
+                      t += h[k]
+                    }
+                    if (t.length >= 4) {
+                      this.target += t
+                      this.targetCoupled.push(t)
+                      t = ""
+                    }
+                  }
+                }
+              }
+            },
+            copyTarget: function() {
+              if (this.target != "") {
+                this.origin = "" + this.target
+                this.target = ""
+                this.targetCoupled = []
+                this.coupleData()
+              }
+            }
+          }
+        })
+    </script>
+  </body>
+</html>
