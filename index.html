@@ -51,6 +51,9 @@
                     <td><input type="number" id="Y" v-model="inY" value=0></td>
                     <td><input type="number" id="Z" v-model="inZ" value=0></td>
                   </tr>
+                  <tr>
+                    <td colspan=4 align-content='center'><button onclick="v.getLucky()">I'm Feelin Lucky</button></td>
+                  </tr>
                 </table>
               </div>
             </div>
@@ -216,6 +219,22 @@
           computed: {
           },
           methods: {
+            rollFloat: function() {
+              var r1 = parseInt(String(Math.random())[2]) 
+              var r2 = parseInt(String(Math.random())[2 + (r1 % 3)]) * r1
+              var r3 = parseFloat(String(Math.random() * r2))
+              var d = String(r3).indexOf('.') + 2
+              var x = String(r3).substring(0, d + (r1 % 3))
+              console.log(r1, r2, r3, d, x)
+              if (parseFloat(x) > 0) {
+                return x
+              } else {
+                return this.rollFloat()
+              }
+            },
+            getLucky: function() {
+              this.key.poly.push([this.rollFloat(), this.rollFloat(), this.rollFloat()])
+            },
             coupleData: function() {
               var d = []
               var t = ""
@@ -256,42 +275,42 @@
 
                   //console.log(point, point2, point3, this.key.poly.length)
                   var angle = this.triangulate(point, point2, point3)
-                  var d1 = this.key.poly[point][0]
-                  var d2 = this.key.poly[point][1]
-                  var d3 = this.key.poly[point][2]
+                  var d1 = parseFloat(this.key.poly[point][0])
+                  var d2 = parseFloat(this.key.poly[point][1])
+                  var d3 = parseFloat(this.key.poly[point][2])
                   var h = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"]
                   
                   if (angle < 15) {
                       var e = Math.floor((d1 + d2 + d3)) % 15
-                      //console.log(e)
+                      //console.log(e, angle, d1, d2, d3)
                       t += "+" + h[Math.abs(e)]
                   } else if (angle < 30) {
                       var e = Math.floor((d1 + d2 - d3)) % 15
-                      //console.log(e)
+                      //console.log(e, angle, d1, d2, d3)
                       t += "+" + h[Math.abs(e)]
                   } else if (angle < 45) {
                       var e = Math.floor((d1 - d2 - d3)) % 15
-                      //console.log(e)
+                      //console.log(e, angle, d1, d2, d3)
                       t += "+" + h[Math.abs(e)]
                   } else if (angle < 60) {
                       var e = Math.floor((d1 - d2 + d3)) % 15
-                      //console.log(e)
+                      //console.log(e, angle, d1, d2, d3)
                       t += "+" + h[Math.abs(e)]
                   } else if (angle < 75) {
                       var e = Math.ceil((d1 + d2 + d3)) % 15
-                      //console.log(e)
+                      //console.log(e, angle, d1, d2, d3)
                       t += "-" + h[Math.abs(e)]
                   } else if (angle < 90) {
                       var e = Math.ceil((d1 + d2 - d3)) % 15
-                      //console.log(e)
+                      //console.log(e, angle, d1, d2, d3)
                       t += "-" + h[Math.abs(e)]
                   } else if (angle < 105) {
                       var e = Math.ceil((d1 - d2 - d3)) % 15
-                      //console.log(e)
+                      //console.log(e, angle, d1, d2, d3)
                       t += "-" + h[Math.abs(e)]
                   } else {
                       var e = Math.ceil((d1 - d2 + d3)) % 15
-                      //console.log(e)
+                      //console.log(e, angle, d1, d2, d3)
                       t += "-" + h[Math.abs(e)]
                   }
                   if (t.length >= 8) {
@@ -311,22 +330,17 @@
             },
             triangulate: function(index, i2, i3) {
               var a = 0
-              for (var i = 0; i < this.key.poly[index].length; i++) {
-                  a += Math.pow((this.key.poly[i2][i] - this.key.poly[index][i]), 2)
-              }
-              a = Math.sqrt(a)
-
               var b = 0
-              for (var i = 0; i < this.key.poly[index].length; i++) {
-                  b += Math.pow((this.key.poly[index][i] - this.key.poly[i3][i]), 2)
-              }
-              b = Math.sqrt(b)
-
               var c = 0
               for (var i = 0; i < this.key.poly[index].length; i++) {
-                  c += Math.pow((this.key.poly[i3][i] - this.key.poly[i2][i]), 2)
-              }
+                  a += Math.pow((parseFloat(this.key.poly[i2][i]) - parseFloat(this.key.poly[index][i])), 2)
+                  b += Math.pow((parseFloat(this.key.poly[index][i]) - parseFloat(this.key.poly[i3][i])), 2)
+                  c += Math.pow((parseFloat(this.key.poly[i3][i]) - parseFloat(this.key.poly[i2][i])), 2)
+                }
+              a = Math.sqrt(a)
+              b = Math.sqrt(b)
               c = Math.sqrt(c)
+              
 
               var cosC = (Math.pow(a, 2) + Math.pow(b, 2) - Math.pow(c, 2)) / (2 * a * b)
               var pi = Math.PI

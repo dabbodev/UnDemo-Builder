@@ -47,35 +47,35 @@ class Unobtainium {
 
             
             if (angle < 15) {
-                var e = Math.floor((d1 + d2 + d3)) % 15
+                var e = parseInt(Math.floor((d1 + d2 + d3))) % 15
                 //console.log(e)
                 this.data[i] = (this.data[i] + e)
             } else if (angle < 30) {
-                var e = Math.floor((d1 + d2 - d3)) % 15
+                var e = parseInt(Math.floor((d1 + d2 - d3))) % 15
                 //console.log(e)
                 this.data[i] = (this.data[i] + e)
             } else if (angle < 45) {
-                var e = Math.floor((d1 - d2 - d3)) % 15
+                var e = parseInt(Math.floor((d1 - d2 - d3))) % 15
                 //console.log(e)
                 this.data[i] = (this.data[i] + e)
             } else if (angle < 60) {
-                var e = Math.floor((d1 - d2 + d3)) % 15
+                var e = parseInt(Math.floor((d1 - d2 + d3))) % 15
                 //console.log(e)
                 this.data[i] = (this.data[i] + e)
             } else if (angle < 75) {
-                var e = Math.ceil((d1 + d2 + d3)) % 15
+                var e = parseInt(Math.ceil((d1 + d2 + d3))) % 15
                 //console.log(e)
                 this.data[i] = (this.data[i] - e)
             } else if (angle < 90) {
-                var e = Math.ceil((d1 + d2 - d3)) % 15
+                var e = parseInt(Math.ceil((d1 + d2 - d3))) % 15
                 //console.log(e)
                 this.data[i] = (this.data[i] - e)
             } else if (angle < 105) {
-                var e = Math.ceil((d1 - d2 - d3)) % 15
+                var e = parseInt(Math.ceil((d1 - d2 - d3))) % 15
                 //console.log(e)
                 this.data[i] = (this.data[i] - e)
             } else {
-                var e = Math.ceil((d1 - d2 + d3)) % 15
+                var e = parseInt(Math.ceil((d1 - d2 + d3))) % 15
                 //console.log(e)
                 this.data[i] = (this.data[i] - e)
             }

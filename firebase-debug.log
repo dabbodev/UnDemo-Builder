@@ -1,0 +1,42 @@
+[debug] [2022-01-12T19:51:48.061Z] ----------------------------------------------------------------------
+[debug] [2022-01-12T19:51:48.062Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\dg142\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js serve
+[debug] [2022-01-12T19:51:48.063Z] CLI Version:   9.19.0
+[debug] [2022-01-12T19:51:48.063Z] Platform:      win32
+[debug] [2022-01-12T19:51:48.063Z] Node Version:  v15.3.0
+[debug] [2022-01-12T19:51:48.063Z] Time:          Wed Jan 12 2022 11:51:48 GMT-0800 (Pacific Standard Time)
+[debug] [2022-01-12T19:51:48.064Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2022-01-12T19:51:48.065Z] >>> [apiv2][query] GET https://firebase-public.firebaseio.com/cli.json [none]
+[debug] [2022-01-12T19:51:48.124Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2022-01-12T19:51:48.124Z] > authorizing via signed-in user (admin@stuffinpuff.com)
+[debug] [2022-01-12T19:51:48.124Z] [iam] checking project undemo-builder for permissions ["firebase.projects.get"]
+[debug] [2022-01-12T19:51:48.125Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2022-01-12T19:51:48.125Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2022-01-12T19:51:50.488Z] <<< HTTP RESPONSE 200 {"cache-control":"no-cache, no-store, max-age=0, must-revalidate","expires":"Mon, 01 Jan 1990 00:00:00 GMT","pragma":"no-cache","date":"Wed, 12 Jan 2022 19:51:50 GMT","content-type":"application/json; charset=utf-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","server":"scaffolding on HTTPServer2","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2022-01-12T19:51:50.498Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/undemo-builder:testIamPermissions  
+ {"permissions":["firebase.projects.get"]}
+[debug] [2022-01-12T19:51:51.121Z] <<< [apiv2][status] GET https://firebase-public.firebaseio.com/cli.json 200
+[debug] [2022-01-12T19:51:51.121Z] <<< [apiv2][body] GET https://firebase-public.firebaseio.com/cli.json {"cloudBuildErrorAfter":1594252800000,"cloudBuildWarnAfter":1590019200000,"defaultNode10After":1594252800000,"minVersion":"3.0.5","node8DeploysDisabledAfter":1613390400000,"node8RuntimeDisabledAfter":1615809600000,"node8WarnAfter":1600128000000}
+[debug] [2022-01-12T19:51:53.208Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Wed, 12 Jan 2022 19:51:52 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","server-timing":"gfet4t7; dur=164","alt-svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2022-01-12T19:51:53.209Z] [iam] error while checking permissions, command may fail: FirebaseError: Authorization failed. This account is missing the following required permissions on project undemo-builder:
+
+  firebase.projects.get
+[debug] [2022-01-12T19:51:53.209Z] > refreshing access token with scopes: []
+[debug] [2022-01-12T19:51:53.209Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2022-01-12T19:51:55.650Z] <<< HTTP RESPONSE 200 {"pragma":"no-cache","expires":"Mon, 01 Jan 1990 00:00:00 GMT","cache-control":"no-cache, no-store, max-age=0, must-revalidate","date":"Wed, 12 Jan 2022 19:51:55 GMT","content-type":"application/json; charset=utf-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","server":"scaffolding on HTTPServer2","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2022-01-12T19:51:55.657Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/undemo-builder [none]
+[debug] [2022-01-12T19:51:58.013Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/undemo-builder 403
+[debug] [2022-01-12T19:51:58.014Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/undemo-builder {"error":{"code":403,"message":"The caller does not have permission","status":"PERMISSION_DENIED"}}
+[debug] [2022-01-12T19:51:58.014Z] HTTP Error: 403, The caller does not have permission
+[debug] [2022-01-12T19:51:58.015Z] FirebaseError: HTTP Error: 403, The caller does not have permission
+    at module.exports (C:\Users\dg142\AppData\Roaming\npm\node_modules\firebase-tools\lib\responseToError.js:38:12)
+    at Client.doRequest (C:\Users\dg142\AppData\Roaming\npm\node_modules\firebase-tools\lib\apiv2.js:238:23)
+    at processTicksAndRejections (node:internal/process/task_queues:93:5)
+    at async Client.request (C:\Users\dg142\AppData\Roaming\npm\node_modules\firebase-tools\lib\apiv2.js:96:20)
+    at async Object.getFirebaseProject (C:\Users\dg142\AppData\Roaming\npm\node_modules\firebase-tools\lib\management\projects.js:290:21)
+    at async needProjectNumber (C:\Users\dg142\AppData\Roaming\npm\node_modules\firebase-tools\lib\projectUtils.js:46:22)
+    at async C:\Users\dg142\AppData\Roaming\npm\node_modules\firebase-tools\lib\command.js:188:17
+[error] 
+[error] Error: Failed to get Firebase project undemo-builder. Please make sure the project exists and your account has permission to access it.
